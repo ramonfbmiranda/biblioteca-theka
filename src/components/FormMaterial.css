@@ -21,10 +21,8 @@
 
 .material__folha {
   width: 2.8rem;
-  height: 2.2rem;
-  border-radius: 100% 0 100% 0;
-  background: #555;
-  transform: rotate(-10deg);
+  height: 2.8rem;
+  object-fit: contain;
 }
 
 .material__marca {

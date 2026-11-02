@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Cabecalho.css";
+import setinha from "../assets/Setinha.png";
 
 function IconeUsuario() {
   return (
@@ -13,7 +14,7 @@ function IconeUsuario() {
 function Cabecalho() {
   return (
     <header className="cabecalho">
-      <span className="cabecalho__logo" aria-hidden="true" />
+      <img className="cabecalho__logo" src={setinha} alt="" />
       <nav className="cabecalho__nav">
         <Link to="/acervo">Acervo</Link>
         <Link to="/sobre">Sobre nós</Link>

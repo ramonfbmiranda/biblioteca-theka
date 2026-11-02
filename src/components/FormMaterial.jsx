@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import Rodape from "./Rodape";
+import setinha from "../assets/Setinha.png";
+
 import "./FormMaterial.css";
 import { buscarPorIsbn, limparIsbn } from "../services/isbn";
 import { buscarLivro, criarLivro, atualizarLivro, deletarLivro } from "../services/api";
@@ -109,7 +111,7 @@ function FormMaterial({ modo = "adicionar" }) {
   return (
     <div className="material">
       <header className="material__header">
-        <span className="material__folha" aria-hidden="true" />
+        <img className="material__folha" src={setinha} alt="" />
         <div className="material__marca">Theka</div>
       </header>
 
