@@ -73,7 +73,8 @@ function Acervo() {
 
   return (
     <div className="acervo">
-      {/* Cabeçalho */}
+      <Cabecalho />
+      {/* Cabeçalho [Componentizado]
       <header className="acervo__header">
         <span className="acervo__logo-circulo" aria-hidden="true" />
         <nav className="acervo__nav">
@@ -83,7 +84,7 @@ function Acervo() {
         <button type="button" className="acervo__usuario" aria-label="Perfil">
           <IconeUsuario />
         </button>
-      </header>
+      </header> */}
 
       {/* Novidades */}
       <section className="acervo__hero">
