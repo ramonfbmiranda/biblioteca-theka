@@ -34,7 +34,7 @@ function FormMaterial({ modo = "adicionar" }) {
   
   const { id } = useParams();
 
-  const { recarregar } = useOutletContext();
+  const { recarregar } = useOutletContext() ?? {};
   
   const [valores, setValores] = useState(VAZIO);
   const [buscandoIsbn, setBuscandoIsbn] = useState(false);
@@ -88,7 +88,7 @@ function FormMaterial({ modo = "adicionar" }) {
     try {
       if (editando) await atualizarLivro(id, dados);
       else await criarLivro(dados);
-      await recarregar(); 
+      await recarregar?.();
       navigate("/acervo");
     } catch {
       setErro("Não foi possível salvar. Confira se a API está rodando.");
@@ -98,12 +98,13 @@ function FormMaterial({ modo = "adicionar" }) {
   async function handleDeletar() {
     setErro("");
     try {
-      await recarregar();
+      await deletarLivro(id);
+      await recarregar?.();
       navigate("/acervo");
-    } catch {
-      setErro("Não foi possível deletar. Confira se a API está rodando.");
-    }
+  } catch {
+    setErro("Não foi possível deletar. Confira se a API está rodando.");
   }
+}
 
   return (
     <div className="material">
