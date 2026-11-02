@@ -4,6 +4,7 @@ import RecuperarSenha from "./pages/RecuperarSenha";
 import RedefinirSenha from "./pages/RedefinirSenha";
 import Cadastro from "./pages/Cadastro";
 import Acervo from "./pages/Acervo";
+import SobreNos from "./pages/SobreNos";
 import AdicionarMaterial from "./components/AdicionarMaterial";
 import EditarMaterial from "./components/EditarMaterial";
 
