@@ -1,0 +1,16 @@
+.sobre {
+  min-height: 100vh;
+  background: var(--cor-branco);
+  color: var(--cor-cinza-escuro);
+}
+
+.sobre__conteudo {
+  --margem: max(1rem, calc((100% - 1200px) / 2));
+  padding: 89px var(--margem) var(--espaco-6);
+}
+
+.sobre__conteudo h1 {
+  font-size: clamp(2.75rem, 6.25vw, 6.25rem);
+  line-height: 1.05;
+  color: var(--cor-vinho);
+}
