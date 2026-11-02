@@ -43,6 +43,15 @@ function IconeMais() {
   );
 }
 
+function IconeSetaCima() {
+  return (
+    <svg viewBox="0 0 36 36" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="18" cy="18" r="16" />
+      <path d="M18 25V11M12 17l6-6 6 6" />
+    </svg>
+  );
+}
+
 function ImgCapa({ livro }) {
   const src = urlCapa(livro);
   if (!src) return null;
@@ -60,18 +69,18 @@ function Acervo() {
   const [erro, setErro] = useState("");
   const [ativo, setAtivo] = useState(0);
 
-    const carregar = useCallback(
-      () => listarLivros().then(setLivros).catch((e) => setErro(e.message)),
-      []
-    );
+  const carregar = useCallback(
+    () => listarLivros().then(setLivros).catch((e) => setErro(e.message)),
+    []
+  );
 
-    useEffect(() => {
-      carregar();
-    }, [carregar]);
+  useEffect(() => {
+    carregar();
+  }, [carregar]);
 
   const marcados = livros
-  .filter((l) => l.destaque)
-  .sort((a, b) => a.destaque - b.destaque);
+    .filter((l) => l.destaque)
+    .sort((a, b) => a.destaque - b.destaque);
   const destaques = marcados.length ? marcados : livros.slice(0, 5);
   const atual = destaques[ativo] ? ativo : 0;
   const destaque = destaques[atual];
@@ -94,7 +103,7 @@ function Acervo() {
       {/* Novidades */}
       <section className="acervo__hero">
         <div className="acervo__hero-texto">
-          <h1>Novidades<br />da<br />semana</h1>  
+          <h1>Novidades<br />da<br />semana</h1>
           {destaque && (
             <div>
               <p className="acervo__hero-livro">{destaque.titulo}</p>
@@ -121,7 +130,11 @@ function Acervo() {
                 <ImgCapa livro={livro} />
                 {i !== atual && (
                   <span className="acervo__destaque-link" aria-hidden="true">
-                    <IconeSeta />
+                    {i !== atual && (
+                      <span className="acervo__destaque-link" aria-hidden="true">
+                        <IconeSetaCima />
+                      </span>
+                    )}
                   </span>
                 )}
               </button>
@@ -152,6 +165,9 @@ function Acervo() {
           <select aria-label="Ordenar" defaultValue="">
             <option value="" disabled>Ordem</option>
           </select>
+          <select aria-label="Editora" defaultValue="">
+            <option value="" disabled>Editora</option>
+          </select>
           <button type="submit">
             Buscar <IconeBusca />
           </button>
@@ -163,7 +179,7 @@ function Acervo() {
           {livros.map((livro) => (
             <li key={livro.id}>
               <Link
-               to={`/acervo/editar-material/${livro.id}`}>
+                to={`/acervo/editar-material/${livro.id}`}>
                 <div className="acervo__capa">
                   <ImgCapa livro={livro} />
                 </div>
@@ -171,7 +187,7 @@ function Acervo() {
             </li>
           ))}
         </ul>
-{/* (RETIREI BOTÕES PORQUE NÃO TEM SENTIDO)
+        {/* (RETIREI BOTÕES PORQUE NÃO TEM SENTIDO)
         <nav className="acervo__paginacao" aria-label="Paginação">
           <button type="button" className="acervo__seta" aria-label="Página anterior">‹</button>
           <button type="button">1</button>
@@ -184,9 +200,9 @@ function Acervo() {
       <Link to="/acervo/adicionar-material" className="acervo__adicionar" aria-label="Adicionar material">
         <IconeMais />
       </Link>
-      
+
       <Outlet context={{ recarregar: carregar }} />
-      
+
       <Rodape />
     </div>
   );

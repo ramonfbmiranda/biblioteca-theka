@@ -5,6 +5,7 @@
   --cor-marrom: #8b4a0e;
   --cor-branco: #ffffff;
   --cor-texto: #3a2008;
+  --u: calc(min(100vw, 2200px) / 1600);
 
   /* Acervo */
   --cor-vinho: #81013a;
