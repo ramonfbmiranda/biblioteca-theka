@@ -58,6 +58,7 @@ function ImgCapa({ livro }) {
 function Acervo() {
   const [livros, setLivros] = useState([]);
   const [erro, setErro] = useState("");
+  const [ativo, setAtivo] = useState(0);
 
     const carregar = useCallback(
       () => listarLivros().then(setLivros).catch((e) => setErro(e.message)),
@@ -68,8 +69,12 @@ function Acervo() {
       carregar();
     }, [carregar]);
 
-  const destaques = livros.slice(0, 5);
-  const destaque = destaques[0];
+  const marcados = livros
+  .filter((l) => l.destaque)
+  .sort((a, b) => a.destaque - b.destaque);
+  const destaques = marcados.length ? marcados : livros.slice(0, 5);
+  const atual = destaques[ativo] ? ativo : 0;
+  const destaque = destaques[atual];
 
   return (
     <div className="acervo">
@@ -104,16 +109,32 @@ function Acervo() {
           {destaques.map((livro, i) => (
             <div
               key={livro.id}
-              className={`acervo__destaque ${i === 0 ? "acervo__destaque--ativo" : ""}`}
+              className={`acervo__destaque ${i === atual ? "acervo__destaque--ativo" : ""}`}
             >
-              <ImgCapa livro={livro} />
-              <Link
-                className="acervo__destaque-link"
-                to={`/acervo/editar-material/${livro.id}`}
-                aria-label={`Abrir ${livro.titulo}`}
+              <button
+                type="button"
+                className="acervo__destaque-selecionar"
+                onClick={() => setAtivo(i)}
+                aria-label={`Mostrar ${livro.titulo}`}
+                aria-pressed={i === atual}
               >
-                <IconeSeta />
-              </Link>
+                <ImgCapa livro={livro} />
+                {i !== atual && (
+                  <span className="acervo__destaque-link" aria-hidden="true">
+                    <IconeSeta />
+                  </span>
+                )}
+              </button>
+
+              {i === atual && (
+                <Link
+                  className="acervo__destaque-link"
+                  to={`/acervo/editar-material/${livro.id}`}
+                  aria-label={`Abrir ${livro.titulo}`}
+                >
+                  <IconeSeta />
+                </Link>
+              )}
             </div>
           ))}
         </div>
