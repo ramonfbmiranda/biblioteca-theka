@@ -181,7 +181,7 @@ function Acervo() {
         </nav> */}
       </section>
 
-      <Link to="/adicionar-material" className="acervo__adicionar" aria-label="Adicionar material">
+      <Link to="acervo/adicionar-material" className="acervo__adicionar" aria-label="Adicionar material">
         <IconeMais />
       </Link>
       
