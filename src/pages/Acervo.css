@@ -5,13 +5,13 @@
   color: var(--cor-cinza-escuro);
 }
 
-/* Cabeçalho */
+/* Cabeçalho [FOI COMPONENTIZADO EM ./Cabecalho.css]
 .acervo__header {
   display: flex;
   align-items: center;
   gap: 100px;
   padding: 55px calc(var(--margem) + 56px) 0;
-}
+} */
 
 .acervo__logo-circulo {
   width: 72px;
