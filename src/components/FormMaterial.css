@@ -159,14 +159,37 @@
 }
 
 /* Botões */
+/* .material__acoes--entre {
+  justify-content: space-between;
+}
+
+.material__botao--largo {
+  width: 100%;
+} */
+
 .material__acoes {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--espaco-3);
 }
 
-.material__acoes--entre {
+/* Editar no celular: Deletar à esquerda, Salvar à direita, Cancelar embaixo em largura total */
+.material__acoes--editar {
   justify-content: space-between;
+}
+
+.material__acoes--editar .material__deletar {
+  order: 1;
+}
+
+.material__acoes--editar .material__salvar {
+  order: 2;
+}
+
+.material__acoes--editar .material__cancelar {
+  order: 3;
+  flex: 1 0 100%;
 }
 
 .material__botao {
@@ -187,9 +210,6 @@
   color: var(--vinho);
 }
 
-.material__botao--largo {
-  width: 100%;
-}
 
 .material__capa img {
   position: absolute;
@@ -202,4 +222,106 @@
 
 .material__aviso {
   font-size: 0.8rem;
+}
+
+/* Desktop: modal por cima do Acervo */
+@media (min-width: 901px) {
+  .material {
+    display: flex;
+    padding: var(--espaco-5);
+    background: rgb(0 0 0 / 55%);
+  }
+
+  .material__header,
+  .material .rodape {
+    display: none;
+  }
+
+  .material__main {
+    display: grid;
+    grid-template-columns: clamp(10rem, 20vw, 237px) 1fr;
+    column-gap: 28px;
+    align-items: start;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 45px 57px 57px;
+    border-radius: 24px;
+    background: var(--cor-branco);
+  }
+
+  .material__titulo {
+    grid-column: 1 / -1;
+    margin-bottom: 2.5rem;
+    font-size: 2.25rem;
+  }
+
+  .material__capa {
+    width: 100%;
+    margin: 0;
+    border-radius: 1.5rem;
+    aspect-ratio: 237 / 346;
+  }
+
+  .material__capa img {
+    border-radius: 1.5rem;
+  }
+
+  .material__form {
+    display: grid;
+    grid-template-columns: 1fr minmax(7.5rem, 176px) minmax(7.5rem, 176px);
+    gap: 18px 20px;
+  }
+
+  .material__linha {
+    display: contents;
+  }
+
+  .material__campo--cheio,
+  .material__aviso,
+  .material__acoes {
+    grid-column: 1 / -1;
+  }
+
+  .material__campo label {
+    line-height: 1.2;
+  }
+
+  .material__campo input,
+  .material__campo select {
+    padding: 0.45rem 1.25rem;
+  }
+
+  .material__select select {
+    padding-right: 2.5rem;
+  }
+
+  .material__campo textarea {
+    min-height: 133px;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .material__botao {
+    padding: 0.5rem 1.5rem;
+  }
+
+  .material__acoes,
+  .material__acoes--editar {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+
+  .material__acoes--editar .material__deletar {
+    order: 0;
+    margin-right: auto;
+  }
+
+  .material__acoes--editar .material__cancelar {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  .material__acoes--editar .material__salvar {
+    order: 2;
+  }
 }

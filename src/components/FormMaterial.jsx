@@ -33,16 +33,16 @@ const VAZIO = { titulo: "", paginas: "", isbn: "", autor: "", ano: "", editora: 
 function FormMaterial({ modo = "adicionar" }) {
   const navigate = useNavigate();
   const editando = modo === "editar";
-  
+
   const { id } = useParams();
 
   const { recarregar } = useOutletContext() ?? {};
-  
+
   const [valores, setValores] = useState(VAZIO);
   const [buscandoIsbn, setBuscandoIsbn] = useState(false);
   const [avisoIsbn, setAvisoIsbn] = useState("");
   const [erro, setErro] = useState("");
-  
+
   useEffect(() => {
     if (editando && id) {
       buscarLivro(id)
@@ -103,10 +103,10 @@ function FormMaterial({ modo = "adicionar" }) {
       await deletarLivro(id);
       await recarregar?.();
       navigate("/acervo");
-  } catch {
-    setErro("Não foi possível deletar. Confira se a API está rodando.");
+    } catch {
+      setErro("Não foi possível deletar. Confira se a API está rodando.");
+    }
   }
-}
 
   return (
     <div className="material">
@@ -174,7 +174,7 @@ function FormMaterial({ modo = "adicionar" }) {
             </Campo>
           </div>
 
-          <Campo label="Resumo do material:" name="resumo">
+          <Campo label="Resumo do material:" name="resumo" className="material--campo--cheio">
             <textarea
               id="resumo"
               name="resumo"
@@ -187,24 +187,19 @@ function FormMaterial({ modo = "adicionar" }) {
 
           {erro && <p className="material__aviso" role="alert">{erro}</p>}
 
-          {editando ? (
-            <>
-              <div className="material__acoes material__acoes--entre">
-                <button type="button" className="material__botao" onClick={handleDeletar}>Deletar <Lixeira /></button>
-                <button type="submit" className="material__botao">Salvar <Marcador /></button>
-              </div>
-              <button type="button" className="material__botao material__botao--contorno material__botao--largo" onClick={() => navigate("/acervo")}>
-                Cancelar
+          <div className={`material__acoes ${editando ? "material__acoes--editar" : ""}`}>
+            {editando && (
+              <button type="button" className="material__botao material__deletar" onClick={handleDeletar}>
+                Deletar <Lixeira />
               </button>
-            </>
-          ) : (
-            <div className="material__acoes">
-              <button type="button" className="material__botao material__botao--contorno" onClick={() => navigate("/acervo")}>
-                Cancelar
-              </button>
-              <button type="submit" className="material__botao">Salvar <Marcador /></button>
-            </div>
-          )}
+            )}
+            <button type="button" className="material__botao material__botao--contorno material__cancelar" onClick={() => navigate("/acervo")}>
+              Cancelar
+            </button>
+            <button type="submit" className="material__botao material__salvar">
+              Salvar <Marcador />
+            </button>
+          </div>
         </form>
       </main>
 
