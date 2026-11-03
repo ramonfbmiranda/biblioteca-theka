@@ -16,6 +16,13 @@
   --cor-cinza-claro: #cacac9;
   --cor-capa: #eaeaea;
 
+  /* Sobre nós */
+  --cor-magenta: #bf0259;
+  --cor-amarelo: #f8c200;
+  --cor-verde: #a1d54a;
+  --cor-vinho-escuro: #48001d;
+  --cor-verde-escuro: #111a04;
+
   /* Fonte */
   --fonte: "DM Sans", system-ui, -apple-system, sans-serif;
 

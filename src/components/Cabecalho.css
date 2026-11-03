@@ -1,77 +1,94 @@
 .cabecalho {
-  --margem: max(12.5%, calc((100% - 1650px) / 2));
-  display: flex;
-  align-items: center;
-  gap: calc(62 * var(--u));
-  padding: calc(55 * var(--u)) calc(var(--margem) + 56 * var(--u)) 0;
+    --margem: max(12.5%, calc((100% - 1650px) / 2));
+    display: flex;
+    align-items: center;
+    gap: calc(62 * var(--u));
+    padding: calc(55 * var(--u)) calc(var(--margem) + 56 * var(--u)) 0;
 }
 
 .cabecalho__logo {
-  flex-shrink: 0;
-  width: calc(72 * var(--u));
-  height: calc(72 * var(--u));
-  padding: calc(14 * var(--u));
-  border-radius: 50%;
-  background: var(--cor-branco);
-  box-shadow: 0 4px 16px rgb(0 0 0 / 8%);
-  object-fit: contain;
+    flex-shrink: 0;
+    width: calc(72 * var(--u));
+    height: calc(72 * var(--u));
+    padding: calc(14 * var(--u));
+    border-radius: 50%;
+    background: var(--cor-branco);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 8%);
+    object-fit: contain;
 }
 
 .cabecalho__barra {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: calc(61 * var(--u));
-  padding: 0 calc(41 * var(--u));
-  border-radius: 999px;
-  background: #f7f7f7;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 8%);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: calc(61 * var(--u));
+    padding: 0 calc(41 * var(--u));
+    border-radius: 999px;
+    background: #f7f7f7;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 8%);
 }
 
 .cabecalho__nav {
-  display: contents;
+    display: contents;
 }
 
 .cabecalho__nav a {
-  font-size: max(1.1rem, calc(30 * var(--u)));
-  font-weight: 700;
-  color: var(--cor-cinza-medio);
-  text-decoration: none;
+    font-size: max(1.1rem, calc(30 * var(--u)));
+    font-weight: 700;
+    color: var(--cor-cinza-medio);
+    text-decoration: none;
 }
 
 .cabecalho__usuario {
-  display: grid;
-  place-items: center;
-  border: none;
-  background: none;
-  color: var(--cor-cinza-medio);
+    display: grid;
+    place-items: center;
+    border: none;
+    background: none;
+    color: var(--cor-cinza-medio);
 }
 
 @media (max-width: 900px) {
-  .cabecalho {
-    --margem: 1rem;
-    justify-content: space-between;
-    gap: var(--espaco-3);
-    padding: 1rem var(--margem) 0;
-  }
+    .cabecalho {
+        --margem: 1rem;
+        justify-content: space-between;
+        gap: var(--espaco-3);
+        padding: 1rem var(--margem) 0;
+    }
 
-  .cabecalho__logo {
-    width: 2.5rem;
-    height: 2.5rem;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-  }
+    .cabecalho__logo {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        background: none;
+        box-shadow: none;
+    }
 
-  .cabecalho__barra {
-    height: auto;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-  }
+    .cabecalho__barra {
+        height: auto;
+        padding: 0;
+        background: none;
+        box-shadow: none;
+    }
 
-  .cabecalho__nav a {
-    font-size: 1rem;
-  }
+    .cabecalho__nav a {
+        font-size: 1rem;
+    }
+
+    /* Variante para fundo escuro (Sobre nós): sem pílula, tudo branco */
+    .cabecalho--claro .cabecalho__logo {
+        background: none;
+        box-shadow: none;
+        filter: brightness(0) invert(1);
+    }
+
+    .cabecalho--claro .cabecalho__barra {
+        background: none;
+        box-shadow: none;
+    }
+
+    .cabecalho--claro .cabecalho__nav a,
+    .cabecalho--claro .cabecalho__usuario {
+        color: var(--cor-branco);
+    }
 }

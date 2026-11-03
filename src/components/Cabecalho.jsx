@@ -12,9 +12,9 @@ function IconeUsuario() {
   );
 }
 
-function Cabecalho() {
+function Cabecalho({ claro = false }) {
   return (
-    <header className="cabecalho">
+    <header className={`cabecalho ${claro ? "cabecalho--claro" : ""}`}>
       <img className="cabecalho__logo" src={setinha} alt="" />
       <div className="cabecalho__barra">
         <nav className="cabecalho__nav">
