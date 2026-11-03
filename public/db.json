@@ -101,12 +101,18 @@
       "capaUrl": "/capas/em-busca-de-mim.jpg"
     }
   ],
-    "usuarios": [
+  "usuarios": [
     {
       "id": "1",
       "nome": "Administrador",
       "email": "admin@eject.com",
       "senha": "#PraCima"
+    },
+    {
+      "nome": "Ramon Miranda'",
+      "email": "ramonfbmiranda@gmail.com",
+      "senha": "Pracimane",
+      "id": "uBxZ5hQXIlE"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
