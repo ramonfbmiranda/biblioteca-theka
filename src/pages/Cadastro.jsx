@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import { cadastrar } from "../services/auth";
 
 function Cadastro() {
   const [dados, setDados] = useState({
@@ -11,16 +12,41 @@ function Cadastro() {
     senha: "",
     confirmarSenha: "",
   });
+  const [erro, setErro] = useState("");
+  const [enviando, setEnviando] = useState(false);
   const navigate = useNavigate();
 
   function handleChange(e) {
     const { name, value } = e.target;
     setDados({ ...dados, [name]: value });
+    setErro("");
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(dados);
+    if (dados.senha.length < 6) {
+      setErro("A senha precisa ter pelo menos 6 caracteres.");
+      return;
+    }
+    if (dados.senha !== dados.confirmarSenha) {
+      setErro("As senhas não conferem.");
+      return;
+    }
+
+    setEnviando(true);
+    setErro("");
+    try {
+      await cadastrar(dados);
+      navigate("/login", { state: { cadastrado: true } });
+    } catch (e) {
+      setErro(
+        e instanceof TypeError
+          ? "Não foi possível conectar. Confira se a API está rodando."
+          : e.message
+      );
+    } finally {
+      setEnviando(false);
+    }
   }
 
   return (
@@ -33,6 +59,7 @@ function Cadastro() {
           onChange={handleChange}
           placeholder="Seu nome completo"
           autoComplete="name"
+          required
         />
 
         <Input
@@ -43,6 +70,7 @@ function Cadastro() {
           onChange={handleChange}
           placeholder="seuemail@email.com"
           autoComplete="email"
+          required
         />
 
         <Input
@@ -53,6 +81,7 @@ function Cadastro() {
           onChange={handleChange}
           placeholder="********"
           autoComplete="new-password"
+          required
         />
 
         <Input
@@ -63,13 +92,18 @@ function Cadastro() {
           onChange={handleChange}
           placeholder="********"
           autoComplete="new-password"
+          required
         />
+
+        {erro && <p className="auth__erro" role="alert">{erro}</p>}
 
         <div className="auth__acoes">
           <Button variante="contorno" onClick={() => navigate("/login")}>
-            Cancelar
+            Voltar
           </Button>
-          <Button type="submit">Salvar</Button>
+          <Button type="submit" disabled={enviando}>
+            {enviando ? "Salvando..." : "Salvar"}
+          </Button>
         </div>
       </form>
     </AuthLayout>

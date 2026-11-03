@@ -1,20 +1,36 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import { entrar } from "../services/auth";
 
 function Login() {
   const [dados, setDados] = useState({ email: "", senha: "" });
+  const [erro, setErro] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const navigate = useNavigate();
+  const { state } = useLocation();
 
   function handleChange(e) {
     const { name, value } = e.target;
     setDados({ ...dados, [name]: value });
+    setErro("");
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(dados);
+    setEnviando(true);
+    setErro("");
+    try {
+      const usuario = await entrar(dados.email, dados.senha);
+      if (usuario) navigate("/acervo");
+      else setErro("E-mail ou senha incorretos.");
+    } catch {
+      setErro("Não foi possível conectar. Confira se a API está rodando.");
+    } finally {
+      setEnviando(false);
+    }
   }
 
   return (
@@ -28,6 +44,7 @@ function Login() {
           onChange={handleChange}
           placeholder="seuemail@email.com"
           autoComplete="email"
+          required
         />
 
         <Input
@@ -38,7 +55,15 @@ function Login() {
           onChange={handleChange}
           placeholder="********"
           autoComplete="current-password"
+          required
         />
+
+        {state?.cadastrado && !erro && (
+          <p className="auth__sucesso" role="status">
+            Cadastro realizado! Entre com seu e-mail e senha.
+          </p>
+        )}
+        {erro && <p className="auth__erro" role="alert">{erro}</p>}
 
         <div className="auth__links">
           <Link to="/recuperar-senha">Esqueceu a senha?</Link>
@@ -46,7 +71,9 @@ function Login() {
         </div>
 
         <div className="auth__acoes">
-          <Button type="submit">Entrar</Button>
+          <Button type="submit" disabled={enviando}>
+            {enviando ? "Entrando..." : "Entrar"}
+          </Button>
         </div>
       </form>
     </AuthLayout>

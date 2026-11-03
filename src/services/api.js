@@ -15,21 +15,21 @@ async function requisitar(caminho, opcoes) {
 
 async function lerEstatico() {
   const resposta = await fetch("/db.json");
-  if (!resposta.ok) throw new Error("Não foi possível carregar o acervo.");
-  const dados = await resposta.json();
-  return dados.livros;
+  if (!resposta.ok) throw new Error("Não foi possível carregar os dados.");
+  return resposta.json();
 }
 
 function somenteLeitura() {
   throw new Error("Esta versão publicada é somente leitura.");
 }
 
+// Livros
 export const listarLivros = () =>
-  MODO_ESTATICO ? lerEstatico() : requisitar("/livros");
+  MODO_ESTATICO ? lerEstatico().then((d) => d.livros) : requisitar("/livros");
 
 export const buscarLivro = async (id) =>
   MODO_ESTATICO
-    ? (await lerEstatico()).find((l) => String(l.id) === String(id))
+    ? (await lerEstatico()).livros.find((l) => String(l.id) === String(id))
     : requisitar(`/livros/${id}`);
 
 export const criarLivro = (dados) =>
@@ -46,3 +46,14 @@ export const deletarLivro = (id) =>
   MODO_ESTATICO
     ? somenteLeitura()
     : requisitar(`/livros/${id}`, { method: "DELETE" });
+
+// Usuários
+export const listarUsuarios = () =>
+  MODO_ESTATICO
+    ? lerEstatico().then((d) => d.usuarios ?? [])
+    : requisitar("/usuarios");
+
+export const criarUsuario = (dados) =>
+  MODO_ESTATICO
+    ? somenteLeitura()
+    : requisitar("/usuarios", { method: "POST", body: JSON.stringify(dados) });

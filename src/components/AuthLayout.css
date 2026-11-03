@@ -173,4 +173,15 @@
   .auth .botao {
     padding: 0.45rem 1.75rem;
   }
+  .auth__erro {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #b3261e;
+}
+
+  .auth__sucesso {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2e7d32;
+}
 }

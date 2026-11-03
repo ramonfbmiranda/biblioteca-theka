@@ -30,3 +30,8 @@
 .botao:active {
   transform: translateY(1px);
 }
+
+.botao:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

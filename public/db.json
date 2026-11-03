@@ -4,7 +4,6 @@
       "id": "1",
       "titulo": "A cabeça do santo",
       "autor": "Socorro Acioli",
-      "destaque": 1,
       "capaUrl": "/capas/a-cabeca-do-santo.jpg",
       "ano": 2016,
       "paginas": 176,
@@ -12,36 +11,33 @@
       "editora": "Companhia das Letras",
       "resumo": "Um jovem que viaja para a cidade de Candeia para cumprir o pedido de sua mãe moribunda: encontrar o pai desconhecido."
     },
-        {
+    {
       "id": "2",
       "titulo": "Oração para desaparecer",
       "autor": "Socorro Acioli",
-      "ano": 2021,
-      "destaque": 5,
       "capaUrl": "/capas/oracao-para-desaparecer.jpg"
     },
     {
-      "id": "3",
       "titulo": "A biblioteca da meia-noite",
+      "paginas": 0,
+      "isbn": "",
       "autor": "Matt Haig",
-      "ano": 2020,
-      "destaque": 2,
-      "capaUrl": "/capas/a-biblioteca-da-meia-noite.jpg"
+      "ano": 0,
+      "editora": "",
+      "resumo": "",
+      "capaUrl": "/capas/a-biblioteca-da-meia-noite.jpg",
+      "id": "3"
     },
     {
       "id": "4",
       "titulo": "Nunca vi a chuva",
       "autor": "Stefano Volp",
-      "ano": 2023,
-      "destaque": 3,
       "capaUrl": "/capas/nunca-vi-a-chuva.jpg"
     },
     {
       "id": "5",
       "titulo": "Canção para ninar menino grande",
       "autor": "Conceição Evaristo",
-      "ano": 2018,
-      "destaque": 4,
       "capaUrl": "/capas/cancao-para-ninar-menino-grande.jpg"
     },
     {
@@ -103,6 +99,14 @@
       "titulo": "Em busca de mim",
       "autor": "Viola Davis",
       "capaUrl": "/capas/em-busca-de-mim.jpg"
+    }
+  ],
+    "usuarios": [
+    {
+      "id": "1",
+      "nome": "Administrador",
+      "email": "admin@eject.com",
+      "senha": "#PraCima"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
