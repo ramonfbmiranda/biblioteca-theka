@@ -1,16 +1,327 @@
 .sobre {
+  --margem: max(12.5%, calc((100% - 1650px) / 2));
   min-height: 100vh;
+  overflow-x: hidden;
   background: var(--cor-branco);
-  color: var(--cor-cinza-escuro);
+  color: var(--cor-vinho-escuro);
 }
 
-.sobre__conteudo {
-  --margem: max(1rem, calc((100% - 1200px) / 2));
-  padding: 89px var(--margem) var(--espaco-6);
+/* Hero */
+.sobre__hero {
+  position: relative;
+  height: calc(792 * var(--u));
+  border-radius: 0 0 calc(20 * var(--u)) calc(20 * var(--u));
+  background: var(--cor-magenta);
+  overflow: hidden;
 }
 
-.sobre__conteudo h1 {
-  font-size: clamp(2.75rem, 6.25vw, 6.25rem);
-  line-height: 1.05;
+.sobre__hero .cabecalho {
+  position: relative;
+  z-index: 1;
+}
+
+.sobre__mascote {
+  position: absolute;
+  top: calc(172 * var(--u));
+  left: 0;
+  width: calc(790 * var(--u));
+  max-width: none;
+  height: auto;
+}
+
+.sobre__apresentacao {
+  position: absolute;
+  top: calc(381 * var(--u));
+  right: var(--margem);
+  width: calc(487 * var(--u));
+  color: var(--cor-branco);
+}
+
+.sobre__apresentacao img {
+  width: 100%;
+  margin-bottom: calc(31 * var(--u));
+}
+
+.sobre__apresentacao p {
+  font-size: max(0.9rem, calc(18.4 * var(--u)));
+  line-height: 1.4;
+}
+
+/* Etiquetas */
+.sobre__etiquetas {
+  display: flex;
+  gap: calc(22 * var(--u));
+  margin: calc(54 * var(--u)) 0 0;
+  padding: 0 0 0 calc(11 * var(--u));
+  list-style: none;
+  overflow: hidden;
+}
+
+.sobre__etiquetas li {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: calc(45 * var(--u));
+  padding: 0 calc(17 * var(--u));
+  border: max(2px, calc(4 * var(--u))) solid var(--cor-vinho-escuro);
+  border-radius: 999px;
+  font-size: max(0.85rem, calc(22 * var(--u)));
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Nossa história */
+.sobre__historia {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(629 * var(--u));
+  margin: calc(121 * var(--u)) var(--margem) 0;
+  padding: calc(48 * var(--u)) calc(96 * var(--u)) calc(100 * var(--u));
+  border-radius: calc(20 * var(--u));
+  background: var(--cor-verde);
+  color: var(--cor-verde-escuro);
+  overflow: hidden;
+}
+
+.sobre__historia h2 {
+  font-size: max(1.8rem, calc(54 * var(--u)));
+  line-height: 1.1;
+}
+
+.sobre__historia-texto {
+  max-width: calc(480 * var(--u));
+  font-size: max(0.9rem, calc(18 * var(--u)));
+  line-height: 1.4;
+}
+
+.sobre__historia-texto p + p {
+  margin-top: calc(18 * var(--u));
+}
+
+/* wordmark laranja girado 90° e esticado, como no design */
+.sobre__historia-logo {
+  position: absolute;
+  top: calc(-47 * var(--u));
+  right: 0;
+  width: calc(358 * var(--u));
+  height: calc(768 * var(--u));
+}
+
+.sobre__historia-logo img {
+  position: absolute;
+  top: calc(768 * var(--u));
+  left: 0;
+  width: calc(768 * var(--u));
+  max-width: none;
+  height: calc(358 * var(--u));
+  object-fit: fill;
+  transform: rotate(-90deg);
+  transform-origin: top left;
+}
+
+/* Valores e equipe */
+.sobre__secao {
+  margin: calc(94 * var(--u)) var(--margem) 0;
+}
+
+.sobre__secao h2 {
+  font-size: max(2rem, calc(57.6 * var(--u)));
+  line-height: 1.1;
   color: var(--cor-vinho);
+}
+
+.sobre__valores {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(19.5 * var(--u));
+  margin-top: calc(26 * var(--u));
+  padding: 0;
+  list-style: none;
+}
+
+.sobre__valor {
+  position: relative;
+  aspect-ratio: 387 / 266;
+  border-radius: calc(20 * var(--u));
+  overflow: hidden;
+}
+
+.sobre__valor h3 {
+  position: relative;
+  z-index: 1;
+  padding: calc(34 * var(--u)) calc(17 * var(--u)) 0;
+  font-size: max(1.1rem, calc(27 * var(--u)));
+  line-height: 1.2;
+}
+
+.sobre__valor img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sobre__valor--amarelo {
+  background: var(--cor-amarelo);
+  color: var(--cor-vinho);
+}
+
+.sobre__valor--verde {
+  background: var(--cor-verde);
+  color: var(--cor-laranja);
+}
+
+.sobre__valor--magenta {
+  background: var(--cor-magenta);
+  color: var(--cor-laranja);
+}
+
+.sobre__equipe {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: calc(19 * var(--u));
+  margin: calc(65 * var(--u)) 0 calc(115 * var(--u));
+  padding: 0;
+  list-style: none;
+}
+
+.sobre__pessoa {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: calc(20 * var(--u));
+  background: var(--cor-card);
+}
+
+/* a foto passa 40px do topo do cartão colorido */
+.sobre__pessoa img {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 40 * var(--u));
+  border-radius: calc(20 * var(--u));
+  object-fit: cover;
+  object-position: top;
+}
+
+.sobre__nome {
+  position: absolute;
+  bottom: calc(14 * var(--u));
+  left: calc(18 * var(--u));
+  display: flex;
+  align-items: center;
+  height: calc(35 * var(--u));
+  padding: 0 calc(16 * var(--u));
+  border-radius: 999px;
+  background: var(--cor-tag);
+  color: var(--cor-branco);
+  font-size: max(0.8rem, calc(20 * var(--u)));
+  font-weight: 600;
+}
+
+/* Provisório: só empilhei para não quebrar no celular (o mobile vou fazer depois) */
+@media (max-width: 900px) {
+  .sobre {
+    --margem: 1rem;
+  }
+
+  .sobre__hero {
+    height: auto;
+    padding-bottom: var(--espaco-5);
+    border-radius: 0 0 1.25rem 1.25rem;
+  }
+
+  .sobre__mascote {
+    position: static;
+    display: block;
+    width: 100%;
+    margin-top: var(--espaco-4);
+  }
+
+  .sobre__apresentacao {
+    position: static;
+    width: auto;
+    margin: var(--espaco-4) var(--margem) 0;
+  }
+
+  .sobre__apresentacao img {
+    width: 60%;
+    margin-bottom: var(--espaco-3);
+  }
+
+  .sobre__etiquetas {
+    gap: 0.75rem;
+    margin-top: var(--espaco-4);
+    padding-left: var(--margem);
+  }
+
+  .sobre__etiquetas li {
+    height: 2.5rem;
+    padding: 0 1rem;
+    border-width: 2px;
+  }
+
+  .sobre__historia {
+    height: auto;
+    gap: var(--espaco-4);
+    margin: var(--espaco-5) var(--margem) 0;
+    padding: var(--espaco-4);
+    border-radius: 1.25rem;
+  }
+
+  .sobre__historia-texto {
+    max-width: none;
+  }
+
+  .sobre__historia-texto p + p {
+    margin-top: 1rem;
+  }
+
+  .sobre__historia-logo {
+    display: none;
+  }
+
+  .sobre__secao {
+    margin: var(--espaco-5) var(--margem) 0;
+  }
+
+  .sobre__valores {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .sobre__valor {
+    border-radius: 1.25rem;
+  }
+
+  .sobre__valor h3 {
+    padding: 1.25rem 1rem 0;
+  }
+
+  .sobre__equipe {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 1rem;
+    margin: 3.5rem 0 var(--espaco-5);
+  }
+
+  .sobre__pessoa,
+  .sobre__pessoa img {
+    border-radius: 1.25rem;
+  }
+
+  .sobre__pessoa img {
+    height: calc(100% + 2.5rem);
+  }
+
+  .sobre__nome {
+    bottom: 0.75rem;
+    left: 0.75rem;
+    height: 2rem;
+    padding: 0 0.75rem;
+    font-size: 0.85rem;
+  }
 }
