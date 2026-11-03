@@ -23,9 +23,9 @@ const etiquetas = [
 ];
 
 const valores = [
-  { titulo: "Acesso para todos", imagem: acessoTodos, tom: "amarelo" },
-  { titulo: "Amor pela leitura", imagem: amorLeitura, tom: "verde" },
-  { titulo: "Comunidade e troca", imagem: comunidadeTroca, tom: "magenta" },
+  { titulo: "", imagem: acessoTodos, tom: "amarelo" },
+  { titulo: "", imagem: amorLeitura, tom: "verde" },
+  { titulo: "", imagem: comunidadeTroca, tom: "magenta" },
 ];
 
 const equipe = [
