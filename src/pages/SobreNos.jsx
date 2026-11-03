@@ -5,7 +5,7 @@ import logotipoAmarelo from "../assets/logotipoAmarelo.png";
 import mascote from "../assets/sobre/MascoteSobre.svg";
 import acessoTodos from "../assets/sobre/AcessoTodos.png";
 import amorLeitura from "../assets/sobre/AmorLeitura.png";
-import comunidadeTroca from "../assets/sobre/ComunidadeDeTroca.png";
+import comunidadeTroca from "../assets/sobre/ComunidadeTroca.png";
 import mariaMarta from "../assets/sobre/MariaMarta.png";
 import juliaMaria from "../assets/sobre/JuliaMaria.png";
 import jenniferOliveira from "../assets/sobre/JenniferOliveira.png";
