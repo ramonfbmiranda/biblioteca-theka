@@ -5,7 +5,7 @@ import setinha from "../assets/Setinha.png";
 
 import "./FormMaterial.css";
 import { buscarPorIsbn, limparIsbn } from "../services/isbn";
-import { buscarLivro, criarLivro, atualizarLivro, deletarLivro } from "../services/api";
+import { buscarLivro, criarLivro, atualizarLivro, deletarLivro, listarEditoras, listarGeneros } from "../services/api";
 
 function Icone({ children }) {
   return (
@@ -28,7 +28,7 @@ function Campo({ label, name, className = "", children }) {
   );
 }
 
-const VAZIO = { titulo: "", paginas: "", isbn: "", autor: "", ano: "", editora: "", resumo: "", capaUrl: "" };
+const VAZIO = { titulo: "", paginas: "", isbn: "", autor: "", ano: "", editora: "", genero: "", resumo: "", capaUrl: "" };
 
 function FormMaterial({ modo = "adicionar" }) {
   const navigate = useNavigate();
@@ -42,6 +42,13 @@ function FormMaterial({ modo = "adicionar" }) {
   const [buscandoIsbn, setBuscandoIsbn] = useState(false);
   const [avisoIsbn, setAvisoIsbn] = useState("");
   const [erro, setErro] = useState("");
+  const [editoras, setEditoras] = useState([]);
+  const [generos, setGeneros] = useState([]);
+
+  useEffect(() => {
+    listarEditoras().then(setEditoras).catch(() => { });
+    listarGeneros().then(setGeneros).catch(() => { });
+  }, []);
 
   useEffect(() => {
     if (editando && id) {
@@ -68,6 +75,12 @@ function FormMaterial({ modo = "adicionar" }) {
         setAvisoIsbn("Livro não encontrado. Preencha manualmente.");
         return;
       }
+      // a editora só vale se existir na lista da API
+      const editora = editoras.find(
+        (e) => e.nome.toLowerCase() === sugestao.editora.toLowerCase()
+      );
+      sugestao.editora = editora ? editora.nome : "";
+
       // só preenche o que ainda está vazio, sem apagar o que a pessoa digitou
       setValores((v) => {
         const novo = { ...v };
@@ -92,8 +105,8 @@ function FormMaterial({ modo = "adicionar" }) {
       else await criarLivro(dados);
       await recarregar?.();
       navigate("/acervo");
-    } catch {
-      setErro("Não foi possível salvar. Confira se a API está rodando.");
+    } catch (e) {
+      setErro(e.message);
     }
   }
 
@@ -104,7 +117,7 @@ function FormMaterial({ modo = "adicionar" }) {
       await recarregar?.();
       navigate("/acervo");
     } catch {
-      setErro("Não foi possível deletar. Confira se a API está rodando.");
+      setErro(e.message);
     }
   }
 
@@ -164,16 +177,25 @@ function FormMaterial({ modo = "adicionar" }) {
               <div className="material__select">
                 <select id="editora" name="editora" value={valores.editora} onChange={handleChange}>
                   <option value="" disabled>Selecionar</option>
-                  <option value="Companhia das Letras">Companhia das Letras</option>
-                  {valores.editora && valores.editora !== "Companhia das Letras" && (
-                    <option value={valores.editora}>{valores.editora}</option>
-                  )}
+                  {editoras.map((e) => (
+                    <option key={e.id} value={e.nome}>{e.nome}</option>
+                  ))}
                 </select>
                 <Seta />
               </div>
             </Campo>
           </div>
-
+          <Campo label="Gênero" name="genero" className="material__campo--cheio">
+            <div className="material__select">
+              <select id="genero" name="genero" value={valores.genero} onChange={handleChange}>
+                <option value="" disabled>Selecionar</option>
+                {generos.map((g) => (
+                  <option key={g.id} value={g.nome}>{g.nome}</option>
+                ))}
+              </select>
+              <Seta />
+            </div>
+          </Campo>
           <Campo label="Resumo do material:" name="resumo" className="material--campo--cheio">
             <textarea
               id="resumo"
