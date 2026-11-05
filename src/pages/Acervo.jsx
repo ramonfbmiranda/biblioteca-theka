@@ -1,27 +1,34 @@
-
 import "./Acervo.css";
 import Rodape from "../components/Rodape";
 import Cabecalho from "../components/Cabecalho";
 import { listarLivros } from "../services/api";
 import { urlCapa } from "../services/isbn";
 import { Link, Outlet } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-// [COMPONENTIZADO PARA O CABEÇALHO] 
-// function IconeUsuario() {
-//   return (
-//     <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-//       <circle cx="12" cy="8" r="4" />
-//       <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
-//     </svg>
-//   );
-// }
+// ignora acento e maiúsculas: "acao" encontra "Ação"
+const normalizar = (t = "") =>
+  String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+const opcoes = (livros, campo) =>
+  [...new Set(livros.map((l) => l[campo]).filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b, "pt-BR")
+  );
 
 function IconeSeta() {
   return (
     <svg viewBox="0 0 36 36" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="18" cy="18" r="16" />
       <path d="M11 18h14M19 12l6 6-6 6" />
+    </svg>
+  );
+}
+
+function IconeSetaCima() {
+  return (
+    <svg viewBox="0 0 36 36" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="18" cy="18" r="16" />
+      <path d="M18 25V11M12 17l6-6 6 6" />
     </svg>
   );
 }
@@ -35,19 +42,19 @@ function IconeBusca() {
   );
 }
 
-function IconeMais() {
+function IconeFiltro() {
   return (
-    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-      <path d="M12 5v14M5 12h14" />
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M6 4v16M12 4v16M18 4v16" />
+      <path d="M4 14h4M10 8h4M16 15h4" />
     </svg>
   );
 }
 
-function IconeSetaCima() {
+function IconeMais() {
   return (
-    <svg viewBox="0 0 36 36" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="18" cy="18" r="16" />
-      <path d="M18 25V11M12 17l6-6 6 6" />
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+      <path d="M12 5v14M5 12h14" />
     </svg>
   );
 }
@@ -68,6 +75,11 @@ function Acervo() {
   const [livros, setLivros] = useState([]);
   const [erro, setErro] = useState("");
   const [ativo, setAtivo] = useState(0);
+  const [busca, setBusca] = useState("");
+  const [genero, setGenero] = useState("");
+  const [editora, setEditora] = useState("");
+  const [compacta, setCompacta] = useState(false);
+  const barraRef = useRef(null);
 
   const carregar = useCallback(
     () => listarLivros().then(setLivros).catch((e) => setErro(e.message)),
@@ -78,27 +90,37 @@ function Acervo() {
     carregar();
   }, [carregar]);
 
-  const marcados = livros
-    .filter((l) => l.destaque)
-    .sort((a, b) => a.destaque - b.destaque);
-  const destaques = marcados.length ? marcados : livros.slice(0, 5);
+  // mostra a busca compacta quando a barra grande sai da tela por cima
+  useEffect(() => {
+    const el = barraRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) =>
+      setCompacta(!e.isIntersecting && e.boundingClientRect.top < 0)
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // carrossel: os 5 livros mais recentes (a API devolve do mais novo para o mais antigo)
+  const destaques = livros.slice(0, 5);
   const atual = destaques[ativo] ? ativo : 0;
   const destaque = destaques[atual];
+
+  // filtros no navegador (a lista inteira já está carregada)
+  const generos = opcoes(livros, "genero");
+  const editoras = opcoes(livros, "editora");
+
+  const termo = normalizar(busca);
+  const filtrados = livros.filter(
+    (l) =>
+      (!termo || normalizar(`${l.titulo} ${l.autor}`).includes(termo)) &&
+      (!genero || l.genero === genero) &&
+      (!editora || l.editora === editora)
+  );
 
   return (
     <div className="acervo">
       <Cabecalho />
-      {/* Cabeçalho [Componentizado]
-      <header className="acervo__header">
-        <span className="acervo__logo-circulo" aria-hidden="true" />
-        <nav className="acervo__nav">
-          <Link to="/acervo">Acervo</Link>
-          <Link to="/sobre">Sobre nós</Link>
-        </nav>
-        <button type="button" className="acervo__usuario" aria-label="Perfil">
-          <IconeUsuario />
-        </button>
-      </header> */}
 
       {/* Novidades */}
       <section className="acervo__hero">
@@ -130,11 +152,7 @@ function Acervo() {
                 <ImgCapa livro={livro} />
                 {i !== atual && (
                   <span className="acervo__destaque-link" aria-hidden="true">
-                    {i !== atual && (
-                      <span className="acervo__destaque-link" aria-hidden="true">
-                        <IconeSetaCima />
-                      </span>
-                    )}
+                    <IconeSetaCima />
                   </span>
                 )}
               </button>
@@ -157,16 +175,25 @@ function Acervo() {
       <section className="acervo__catalogo">
         <h2>Veja nosso catálogo</h2>
 
-        <form className="acervo__busca" onSubmit={(e) => e.preventDefault()}>
-          <input type="search" placeholder="Fazer busca" aria-label="Fazer busca" />
-          <select aria-label="Gênero" defaultValue="">
-            <option value="" disabled>Gênero</option>
+        <form className="acervo__busca" ref={barraRef} onSubmit={(e) => e.preventDefault()}>
+          <input
+            type="search"
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            placeholder="Fazer busca"
+            aria-label="Fazer busca"
+          />
+          <select aria-label="Gênero" value={genero} onChange={(e) => setGenero(e.target.value)}>
+            <option value="">Gênero</option>
+            {generos.map((g) => (
+              <option key={g} value={g}>{g}</option>
+            ))}
           </select>
-          <select aria-label="Ordenar" defaultValue="">
-            <option value="" disabled>Ordem</option>
-          </select>
-          <select aria-label="Editora" defaultValue="">
-            <option value="" disabled>Editora</option>
+          <select aria-label="Editora" value={editora} onChange={(e) => setEditora(e.target.value)}>
+            <option value="">Editora</option>
+            {editoras.map((e) => (
+              <option key={e} value={e}>{e}</option>
+            ))}
           </select>
           <button type="submit">
             Buscar <IconeBusca />
@@ -175,11 +202,14 @@ function Acervo() {
 
         {erro && <p role="alert">{erro}</p>}
 
+        {livros.length > 0 && filtrados.length === 0 && (
+          <p role="status">Nenhum livro encontrado.</p>
+        )}
+
         <ul className="acervo__grade">
-          {livros.map((livro) => (
+          {filtrados.map((livro) => (
             <li key={livro.id}>
-              <Link
-                to={`/acervo/editar-material/${livro.id}`}>
+              <Link to={`/acervo/editar-material/${livro.id}`}>
                 <div className="acervo__capa">
                   <ImgCapa livro={livro} />
                 </div>
@@ -187,19 +217,34 @@ function Acervo() {
             </li>
           ))}
         </ul>
-        {/* (RETIREI BOTÕES PORQUE NÃO TEM SENTIDO)
-        <nav className="acervo__paginacao" aria-label="Paginação">
-          <button type="button" className="acervo__seta" aria-label="Página anterior">‹</button>
-          <button type="button">1</button>
-          <button type="button" className="acervo__pagina--ativa" aria-current="page">2</button>
-          <button type="button">3</button>
-          <button type="button" className="acervo__seta" aria-label="Próxima página">›</button>
-        </nav> */}
       </section>
 
       <Link to="/acervo/adicionar-material" className="acervo__adicionar" aria-label="Adicionar material">
         <IconeMais />
       </Link>
+
+      {compacta && (
+        <div className="acervo__mini">
+          <label className="acervo__mini-busca">
+            <input
+              type="search"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Fazer busca"
+              aria-label="Fazer busca"
+            />
+            <IconeBusca />
+          </label>
+          <button
+            type="button"
+            className="acervo__mini-filtro"
+            aria-label="Ir para os filtros"
+            onClick={() => barraRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+          >
+            <IconeFiltro />
+          </button>
+        </div>
+      )}
 
       <Outlet context={{ recarregar: carregar }} />
 

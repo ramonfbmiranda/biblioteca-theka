@@ -1,11 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import Rodape from "./Rodape";
 import setinha from "../assets/Setinha.png";
 
 import "./FormMaterial.css";
 import { buscarPorIsbn, limparIsbn } from "../services/isbn";
-import { buscarLivro, criarLivro, atualizarLivro, deletarLivro, listarEditoras, listarGeneros } from "../services/api";
+import {
+  buscarLivro,
+  criarLivro,
+  atualizarLivro,
+  deletarLivro,
+  listarEditoras,
+  listarGeneros,
+} from "../services/api";
 
 function Icone({ children }) {
   return (
@@ -28,14 +35,22 @@ function Campo({ label, name, className = "", children }) {
   );
 }
 
-const VAZIO = { titulo: "", paginas: "", isbn: "", autor: "", ano: "", editora: "", genero: "", resumo: "", capaUrl: "" };
+const VAZIO = {
+  titulo: "",
+  paginas: "",
+  isbn: "",
+  autor: "",
+  ano: "",
+  editora: "",
+  genero: "",
+  resumo: "",
+  capaUrl: "",
+};
 
 function FormMaterial({ modo = "adicionar" }) {
   const navigate = useNavigate();
   const editando = modo === "editar";
-
   const { id } = useParams();
-
   const { recarregar } = useOutletContext() ?? {};
 
   const [valores, setValores] = useState(VAZIO);
@@ -44,12 +59,11 @@ function FormMaterial({ modo = "adicionar" }) {
   const [erro, setErro] = useState("");
   const [editoras, setEditoras] = useState([]);
   const [generos, setGeneros] = useState([]);
+  const [arquivoCapa, setArquivoCapa] = useState(null);
+  const [previa, setPrevia] = useState("");
+  const inputCapa = useRef(null);
 
-  useEffect(() => {
-    listarEditoras().then(setEditoras).catch(() => { });
-    listarGeneros().then(setGeneros).catch(() => { });
-  }, []);
-
+  // carrega o livro (modo editar)
   useEffect(() => {
     if (editando && id) {
       buscarLivro(id)
@@ -58,9 +72,34 @@ function FormMaterial({ modo = "adicionar" }) {
     }
   }, [editando, id]);
 
+  // listas dos selects
+  useEffect(() => {
+    listarEditoras().then(setEditoras).catch(() => {});
+    listarGeneros().then(setGeneros).catch(() => {});
+  }, []);
+
+  // Esc fecha o modal
+  useEffect(() => {
+    const fechar = (e) => e.key === "Escape" && navigate("/acervo");
+    window.addEventListener("keydown", fechar);
+    return () => window.removeEventListener("keydown", fechar);
+  }, [navigate]);
+
+  // libera a prévia da capa da memória
+  useEffect(() => () => {
+    if (previa) URL.revokeObjectURL(previa);
+  }, [previa]);
+
   function handleChange(e) {
     const { name, value } = e.target;
     setValores((v) => ({ ...v, [name]: value }));
+  }
+
+  function handleCapa(e) {
+    const arquivo = e.target.files?.[0];
+    if (!arquivo) return;
+    setArquivoCapa(arquivo);
+    setPrevia(URL.createObjectURL(arquivo));
   }
 
   async function handleIsbnBlur() {
@@ -99,14 +138,13 @@ function FormMaterial({ modo = "adicionar" }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setErro("");
-    const dados = { ...valores, paginas: Number(valores.paginas), ano: Number(valores.ano) };
     try {
-      if (editando) await atualizarLivro(id, dados);
-      else await criarLivro(dados);
+      if (editando) await atualizarLivro(id, valores, arquivoCapa);
+      else await criarLivro(valores, arquivoCapa);
       await recarregar?.();
       navigate("/acervo");
-    } catch (e) {
-      setErro(e.message);
+    } catch (err) {
+      setErro(err.message);
     }
   }
 
@@ -116,13 +154,16 @@ function FormMaterial({ modo = "adicionar" }) {
       await deletarLivro(id);
       await recarregar?.();
       navigate("/acervo");
-    } catch {
-      setErro(e.message);
+    } catch (err) {
+      setErro(err.message);
     }
   }
 
   return (
-    <div className="material">
+    <div
+      className="material"
+      onClick={(e) => e.target === e.currentTarget && navigate("/acervo")}
+    >
       <header className="material__header">
         <img className="material__folha" src={setinha} alt="" />
         <div className="material__marca">Theka</div>
@@ -140,8 +181,11 @@ function FormMaterial({ modo = "adicionar" }) {
         ) : (
           <div className="material__capa">
             <Icone><rect x="3" y="5" width="16" height="14" rx="2" /><path d="M7 3h14v14M3 15l5-5 5 5 3-3" /></Icone>
-            {valores.capaUrl && <img src={valores.capaUrl} alt="Capa do material" />}
-            <button type="button" className="material__upload">
+            {(previa || valores.capaUrl) && (
+              <img src={previa || valores.capaUrl} alt="Capa do material" />
+            )}
+            <input ref={inputCapa} type="file" accept="image/*" onChange={handleCapa} hidden />
+            <button type="button" className="material__upload" onClick={() => inputCapa.current?.click()}>
               Adicionar capa
               <Icone><path d="M12 15V3M8 7l4-4 4 4M5 12v8h14v-8" /></Icone>
             </button>
@@ -177,6 +221,9 @@ function FormMaterial({ modo = "adicionar" }) {
               <div className="material__select">
                 <select id="editora" name="editora" value={valores.editora} onChange={handleChange}>
                   <option value="" disabled>Selecionar</option>
+                  {valores.editora && !editoras.some((e) => e.nome === valores.editora) && (
+                    <option value={valores.editora}>{valores.editora}</option>
+                  )}
                   {editoras.map((e) => (
                     <option key={e.id} value={e.nome}>{e.nome}</option>
                   ))}
@@ -185,10 +232,14 @@ function FormMaterial({ modo = "adicionar" }) {
               </div>
             </Campo>
           </div>
+
           <Campo label="Gênero" name="genero" className="material__campo--cheio">
             <div className="material__select">
               <select id="genero" name="genero" value={valores.genero} onChange={handleChange}>
                 <option value="" disabled>Selecionar</option>
+                {valores.genero && !generos.some((g) => g.nome === valores.genero) && (
+                  <option value={valores.genero}>{valores.genero}</option>
+                )}
                 {generos.map((g) => (
                   <option key={g.id} value={g.nome}>{g.nome}</option>
                 ))}
@@ -196,7 +247,8 @@ function FormMaterial({ modo = "adicionar" }) {
               <Seta />
             </div>
           </Campo>
-          <Campo label="Resumo do material:" name="resumo" className="material--campo--cheio">
+
+          <Campo label="Resumo do material:" name="resumo" className="material__campo--cheio">
             <textarea
               id="resumo"
               name="resumo"

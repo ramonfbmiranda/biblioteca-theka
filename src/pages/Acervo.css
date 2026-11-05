@@ -5,40 +5,6 @@
   color: var(--cor-cinza-escuro);
 }
 
-/* Cabeçalho [FOI COMPONENTIZADO EM ./Cabecalho.css]
-.acervo__header {
-  display: flex;
-  align-items: center;
-  gap: 100px;
-  padding: 55px calc(var(--margem) + 56px) 0;
-} */
-
-.acervo__logo-circulo {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--cor-cinza-medio);
-}
-
-.acervo__nav {
-  display: flex;
-  gap: 300px;
-}
-
-.acervo__nav a {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: var(--cor-cinza-medio);
-  text-decoration: none;
-}
-
-.acervo__usuario {
-  margin-left: 200px;
-  border: none;
-  background: none;
-  color: var(--cor-cinza-medio);
-}
-
 /* Hero */
 .acervo__hero {
   display: flex;
@@ -87,22 +53,6 @@
   flex-basis: 263px;
 }
 
-.acervo__destaque-link {
-  position: absolute;
-  top: 18px;
-  left: 50%;
-  display: grid;
-  transform: translateX(-50%);
-  color: var(--cor-branco);
-  filter: drop-shadow(0 0 3px rgb(0 0 0 / 50%));
-}
-
-.acervo__destaque--ativo .acervo__destaque-link {
-  left: auto;
-  right: 10px;
-  transform: none;
-}
-
 .acervo__destaque-selecionar {
   display: block;
   width: 100%;
@@ -115,6 +65,24 @@
 
 .acervo__destaque--ativo .acervo__destaque-selecionar {
   cursor: default;
+}
+
+.acervo__destaque-link {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  display: grid;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 45%);
+  color: var(--cor-branco);
+  filter: drop-shadow(0 0 3px rgb(0 0 0 / 50%));
+}
+
+.acervo__destaque--ativo .acervo__destaque-link {
+  left: auto;
+  right: 10px;
+  transform: none;
 }
 
 /* Catálogo */
@@ -228,71 +196,64 @@
   box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
 }
 
-/* Paginação */
-.acervo__paginacao {
+/* Busca compacta, fixa no canto quando a barra grande sai da tela */
+.acervo__mini {
+  position: fixed;
+  top: 1rem;
+  left: var(--margem);
+  z-index: 50;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 26px;
-  margin-top: var(--espaco-5);
+  gap: 10px;
 }
 
-.acervo__paginacao button {
-  min-width: 2.5rem;
-  height: 2.5rem;
+.acervo__mini-busca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max(12rem, calc(285 * var(--u)));
+  height: max(2.75rem, calc(62 * var(--u)));
+  padding: 0 6px 0 20px;
+  border: 2px solid var(--cor-vinho);
+  border-radius: 999px;
+  background: var(--cor-branco);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+}
+
+.acervo__mini-busca input {
+  flex: 1;
+  min-width: 0;
   border: none;
   background: none;
-  color: var(--cor-cinza-claro);
-  font-size: 2rem;
-  font-weight: 700;
+  outline: none;
 }
 
-.acervo__paginacao .acervo__seta {
-  width: 38px;
-  min-width: 0;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--cor-rosa);
-  color: var(--cor-branco);
-  font-size: 1.4rem;
-  line-height: 1;
-}
-
-.acervo__paginacao .acervo__pagina--ativa {
-  width: 62px;
-  height: 62px;
+.acervo__mini-busca svg {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.5rem;
   border-radius: 50%;
   background: var(--cor-vinho);
-  color: #f6f6f6;
+  color: var(--cor-branco);
+}
+
+.acervo__mini-filtro {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 50%;
+  background: var(--cor-vinho);
+  color: var(--cor-branco);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
 }
 
 /* Celular e tablet */
 @media (max-width: 900px) {
   .acervo {
     --margem: 1rem;
-  }
-
-  .acervo__header {
-    justify-content: space-between;
-    gap: var(--espaco-3);
-    padding: 1rem var(--margem) 0;
-  }
-
-  .acervo__logo-circulo {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-
-  .acervo__nav {
-    gap: var(--espaco-4);
-  }
-
-  .acervo__nav a {
-    font-size: 1rem;
-  }
-
-  .acervo__usuario {
-    margin-left: 0;
   }
 
   .acervo__hero {
@@ -355,10 +316,13 @@
   .acervo__capa {
     border-radius: 1rem;
   }
+
+  .acervo__mini {
+    display: none;
+  }
 }
 
 /* Desktop: tudo escala com a largura da janela (1 --u = 1px do design em 1600px) */
-
 @media (min-width: 901px) {
   .acervo {
     --margem: max(12.5%, calc((100% - 1650px) / 2));

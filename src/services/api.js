@@ -53,17 +53,31 @@ const deApi = (l) => ({
   capaUrl: l.capa ?? "",
 });
 
+// número vazio vira "undefined" e é omitido do envio (a API rejeita "" em campo numérico)
+const numero = (v) => (v === "" || v == null ? undefined : Number(v));
+
 // formato do site -> API
 const paraApi = (d) => ({
   titulo: d.titulo,
   autor: d.autor,
-  ano_publicacao: d.ano,
-  numero_paginas: d.paginas,
+  ano_publicacao: numero(d.ano),
+  numero_paginas: numero(d.paginas),
   isbn: d.isbn,
   genero: d.genero,
   editora: d.editora,
   resumo: d.resumo,
 });
+
+// JSON normal ou, se houver arquivo de capa, multipart (formulário com arquivo)
+function corpoLivro(metodo, dados, arquivo) {
+  if (!arquivo) return comJson(metodo, paraApi(dados));
+  const form = new FormData();
+  for (const [campo, valor] of Object.entries(paraApi(dados))) {
+    if (valor !== "" && valor != null) form.append(campo, valor);
+  }
+  form.append("capa", arquivo);
+  return { method: metodo, body: form }; // sem Content-Type: o navegador define
+}
 
 // Livros
 export const listarLivros = () =>
@@ -72,11 +86,11 @@ export const listarLivros = () =>
 export const buscarLivro = (id) =>
   requisitar(`${API}/livros/${id}/`).then(deApi);
 
-export const criarLivro = (dados) =>
-  requisitar(`${API}/livros/`, comJson("POST", paraApi(dados))).then(deApi);
+export const criarLivro = (dados, arquivo) =>
+  requisitar(`${API}/livros/`, corpoLivro("POST", dados, arquivo)).then(deApi);
 
-export const atualizarLivro = (id, dados) =>
-  requisitar(`${API}/livros/${id}/`, comJson("PATCH", paraApi(dados))).then(deApi);
+export const atualizarLivro = (id, dados, arquivo) =>
+  requisitar(`${API}/livros/${id}/`, corpoLivro("PATCH", dados, arquivo)).then(deApi);
 
 export const deletarLivro = (id) =>
   requisitar(`${API}/livros/${id}/`, { method: "DELETE" });
