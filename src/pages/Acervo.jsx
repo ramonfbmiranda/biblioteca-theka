@@ -5,6 +5,7 @@ import { listarLivros } from "../services/api";
 import { urlCapa } from "../services/isbn";
 import { Link, Outlet } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
+import setinha from "../assets/Setinha.png";
 
 // ignora acento e maiúsculas: "acao" encontra "Ação"
 const normalizar = (t = "") =>
@@ -17,19 +18,13 @@ const opcoes = (livros, campo) =>
 
 function IconeSeta() {
   return (
-    <svg viewBox="0 0 36 36" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="18" cy="18" r="16" />
-      <path d="M11 18h14M19 12l6 6-6 6" />
-    </svg>
+    <img src={setinha} alt="" width="36" height="36" aria-hidden="true" />
   );
 }
 
 function IconeSetaCima() {
   return (
-    <svg viewBox="0 0 36 36" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="18" cy="18" r="16" />
-      <path d="M18 25V11M12 17l6-6 6 6" />
-    </svg>
+    <img src={setinha} alt="" width="36" height="36" aria-hidden="true" />
   );
 }
 
