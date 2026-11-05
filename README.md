@@ -79,29 +79,31 @@ Sem a API rodando, o Acervo abre vazio e mostra uma mensagem de erro.
 
 ## API e dados
 
-Os livros ficam no `db.json`, servido pelo `json-server`:
+## API e dados
+
+Livros, gêneros e editoras vêm da **API REST da EJECT** (Django REST Framework):
 
 | Método | Endereço | Ação |
 |---|---|---|
-| `GET` | `/livros` | Lista os livros |
-| `GET` | `/livros/:id` | Busca um livro |
-| `POST` | `/livros` | Cadastra um livro |
-| `PUT` | `/livros/:id` | Atualiza um livro |
-| `DELETE` | `/livros/:id` | Exclui um livro |
+| `GET` | `/livros/` | Lista os livros (paginada: o site segue as páginas) |
+| `GET` | `/livros/:id/` | Busca um livro |
+| `POST` | `/livros/` | Cadastra um livro |
+| `PATCH` | `/livros/:id/` | Atualiza um livro |
+| `DELETE` | `/livros/:id/` | Exclui um livro |
+| `GET` | `/generos/` e `/editoras/` | Listas usadas nos filtros e no formulário |
 
-Campos de um livro: `id`, `titulo`, `autor`, `ano`, `paginas`, `isbn`, `editora`, `resumo`, `capaUrl` e, opcionalmente, `destaque` (posição no carrossel de novidades). As imagens das capas ficam em `public/capas/`.
+O arquivo `src/services/api.js` traduz os nomes dos campos da API (`ano_publicacao`, `numero_paginas`, `capa`) para os usados no site.
 
-### Variáveis de ambiente (opcionais)
+**Login e cadastro** usam uma API simulada (`json-server`, coleção `usuarios` do `db.json`) em desenvolvimento. No site publicado, o login lê os usuários do `db.json` (somente leitura).
 
-Crie um arquivo `.env.local` na raiz do projeto, se precisar:
+### Variável de ambiente (opcional)
 
+Em `.env.local`, na raiz:
+
+VITE_API_URL=https://thekaapitrainee1.pythonanywhere.com
 ```
-VITE_API_URL=http://localhost:3000
-VITE_GOOGLE_BOOKS_KEY=sua_chave_aqui
-```
 
-- `VITE_API_URL`: endereço da API. Se não existir, usa `http://localhost:3000`.
-- `VITE_GOOGLE_BOOKS_KEY`: chave do Google Books, usada na busca por ISBN. Sem ela a busca funciona com a cota anônima, que é menor.
+- `VITE_API_URL`: endereço da API.
 
 Reinicie o `npm run dev` depois de alterar o arquivo.
 
