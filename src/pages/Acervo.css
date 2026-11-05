@@ -265,19 +265,56 @@
     gap: var(--espaco-4);
   }
 
+    /* Título numa linha só (ignora os <br />) e sem o texto do livro */
+  .acervo__hero h1 {
+    max-width: none;
+    font-size: 2rem;
+  }
+
+  .acervo__hero h1 br,
+  .acervo__hero-texto > div {
+    display: none;
+  }
+
+  /* Carrossel vertical */
   .acervo__carrossel {
+    flex-direction: column;
     width: 100%;
-    height: 20rem;
+    height: auto;
+    gap: 0.5rem;
   }
 
   .acervo__destaque {
-    flex-basis: 2.2rem;
+    flex: 0 0 2.2rem; /* agora é a ALTURA da faixa */
+    width: 100%;
+    border-radius: 1rem;
   }
 
   .acervo__destaque--ativo {
-    flex-basis: 9rem;
+    flex-basis: 15rem; /* altura da capa ativa */
   }
 
+  /* Seta da faixa inativa: centralizada na vertical, à direita, apontando pra direita */
+  .acervo__destaque-link {
+    top: 50%;
+    left: auto;
+    right: 0.6rem;
+    transform: translateY(-50%);
+  }
+
+  .acervo__destaque:not(.acervo__destaque--ativo) .acervo__destaque-link svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    transform: rotate(90deg); /* a seta "cima" vira "direita" */
+  }
+
+  /* Seta da capa ativa: canto superior direito */
+  .acervo__destaque--ativo .acervo__destaque-link {
+    top: 0.75rem;
+    right: 0.75rem;
+    transform: none;
+  }
+  
   .acervo__catalogo {
     padding-top: var(--espaco-5);
   }
