@@ -60,8 +60,6 @@
         width: 2.5rem;
         height: 2.5rem;
         padding: 0;
-        background: none;
-        box-shadow: none;
     }
 
     .cabecalho__barra {
@@ -76,12 +74,6 @@
     }
 
     /* Variante para fundo escuro (Sobre nós): sem pílula, tudo branco */
-    .cabecalho--claro .cabecalho__logo {
-        background: none;
-        box-shadow: none;
-        filter: brightness(0) invert(1);
-    }
-
     .cabecalho--claro .cabecalho__barra {
         background: none;
         box-shadow: none;

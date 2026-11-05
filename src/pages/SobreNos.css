@@ -222,7 +222,7 @@
   font-weight: 600;
 }
 
-/* Provisório: só empilhei para não quebrar no celular (o mobile vou fazer depois) */
+/* Mobile*/
 @media (max-width: 900px) {
   .sobre {
     --margem: 1rem;
