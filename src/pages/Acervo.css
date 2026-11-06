@@ -1,3 +1,5 @@
+
+
 .acervo {
   --margem: max(1rem, calc((100% - 1200px) / 2));
   min-height: 100vh;
@@ -314,7 +316,7 @@
     right: 0.75rem;
     transform: none;
   }
-  
+
   .acervo__catalogo {
     padding-top: var(--espaco-5);
   }

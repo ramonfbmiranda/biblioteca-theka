@@ -6,6 +6,8 @@ import { urlCapa } from "../services/isbn";
 import { Link, Outlet } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import setinha from "../assets/Setinha.png";
+import setaDireita from "../assets/SetaDireita.png";
+import setaCima from "../assets/SetaCima.png";
 
 // ignora acento e maiúsculas: "acao" encontra "Ação"
 const normalizar = (t = "") =>
@@ -17,15 +19,11 @@ const opcoes = (livros, campo) =>
   );
 
 function IconeSeta() {
-  return (
-    <img src={setinha} alt="" width="36" height="36" aria-hidden="true" />
-  );
+  return <img src={setaDireita} alt="" width="36" height="36" aria-hidden="true" />;
 }
 
 function IconeSetaCima() {
-  return (
-    <img src={setinha} alt="" width="36" height="36" aria-hidden="true" />
-  );
+  return <img src={setaCima} alt="" width="36" height="36" aria-hidden="true" />;
 }
 
 function IconeBusca() {
