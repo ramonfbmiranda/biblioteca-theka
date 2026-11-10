@@ -252,6 +252,49 @@
   box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
 }
 
+/* Paginação */
+.acervo__paginacao {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 26px;
+  margin-top: var(--espaco-5);
+}
+
+.acervo__paginacao button {
+  min-width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  background: none;
+  color: var(--cor-cinza-claro);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.acervo__paginacao .acervo__seta {
+  width: 38px;
+  min-width: 0;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  color: var(--cor-branco);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.acervo__paginacao .acervo__pagina--ativa {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: var(--cor-vinho);
+  color: #f6f6f6;
+}
+
+.acervo__paginacao button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* Celular e tablet */
 @media (max-width: 900px) {
   .acervo {
@@ -360,6 +403,20 @@
     display: none;
   }
 }
+
+  .acervo__paginacao {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .acervo__paginacao button {
+    font-size: 1.4rem;
+  }
+
+  .acervo__paginacao .acervo__pagina--ativa {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
 
 /* Desktop: tudo escala com a largura da janela (1 --u = 1px do design em 1600px) */
 @media (min-width: 901px) {

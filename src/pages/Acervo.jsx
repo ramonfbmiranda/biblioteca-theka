@@ -13,6 +13,8 @@ import setaCima from "../assets/SetaCima.png";
 const normalizar = (t = "") =>
   String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
+const POR_PAGINA = 15;
+
 const opcoes = (livros, campo) =>
   [...new Set(livros.map((l) => l[campo]).filter(Boolean))].sort((a, b) =>
     a.localeCompare(b, "pt-BR")
@@ -72,6 +74,7 @@ function Acervo() {
   const [genero, setGenero] = useState("");
   const [editora, setEditora] = useState("");
   const [compacta, setCompacta] = useState(false);
+  const [pagina, setPagina] = useState(1);
   const barraRef = useRef(null);
 
   const carregar = useCallback(
@@ -110,6 +113,20 @@ function Acervo() {
       (!genero || l.genero === genero) &&
       (!editora || l.editora === editora)
   );
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
+  const paginaAtual = Math.min(pagina, totalPaginas);
+  const visiveis = filtrados.slice((paginaAtual - 1) * POR_PAGINA, paginaAtual * POR_PAGINA);
+
+  function irPara(n) {
+    setPagina(n);
+    barraRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  // ao buscar ou filtrar, volta para a página 1
+  const aoMudar = (setter) => (e) => {
+    setter(e.target.value);
+    setPagina(1);
+  };
 
   return (
     <div className="acervo">
@@ -172,17 +189,17 @@ function Acervo() {
           <input
             type="search"
             value={busca}
-            onChange={(e) => setBusca(e.target.value)}
+            onChange={aoMudar(setBusca)}
             placeholder="Fazer busca"
             aria-label="Fazer busca"
           />
-          <select aria-label="Gênero" value={genero} onChange={(e) => setGenero(e.target.value)}>
+          <select aria-label="Gênero" value={genero} onChange={aoMudar(setGenero)}>
             <option value="">Gênero</option>
             {generos.map((g) => (
               <option key={g} value={g}>{g}</option>
             ))}
           </select>
-          <select aria-label="Editora" value={editora} onChange={(e) => setEditora(e.target.value)}>
+          <select aria-label="Editora" value={editora} onChange={aoMudar(setEditora)}>
             <option value="">Editora</option>
             {editoras.map((e) => (
               <option key={e} value={e}>{e}</option>
@@ -200,7 +217,7 @@ function Acervo() {
         )}
 
         <ul className="acervo__grade">
-          {filtrados.map((livro) => (
+          {visiveis.map((livro) => (
             <li key={livro.id}>
               <Link to={`/acervo/editar-material/${livro.id}`}>
                 <div className="acervo__capa">
@@ -210,6 +227,43 @@ function Acervo() {
             </li>
           ))}
         </ul>
+
+        {totalPaginas > 1 && (
+          <nav className="acervo__paginacao" aria-label="Paginação">
+            <button
+              type="button"
+              className="acervo__seta"
+              aria-label="Página anterior"
+              disabled={paginaAtual === 1}
+              onClick={() => irPara(paginaAtual - 1)}
+            >
+              ‹
+            </button>
+
+            {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((n) => (
+              <button
+                key={n}
+                type="button"
+                className={n === paginaAtual ? "acervo__pagina--ativa" : ""}
+                aria-current={n === paginaAtual ? "page" : undefined}
+                onClick={() => irPara(n)}
+              >
+                {n}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              className="acervo__seta"
+              aria-label="Próxima página"
+              disabled={paginaAtual === totalPaginas}
+              onClick={() => irPara(paginaAtual + 1)}
+            >
+              ›
+            </button>
+          </nav>
+        )}
+
       </section>
 
       <Link to="/acervo/adicionar-material" className="acervo__adicionar" aria-label="Adicionar material">
@@ -222,7 +276,7 @@ function Acervo() {
             <input
               type="search"
               value={busca}
-              onChange={(e) => setBusca(e.target.value)}
+              onChange={aoMudar(setBusca)}
               placeholder="Fazer busca"
               aria-label="Fazer busca"
             />
