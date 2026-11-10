@@ -20,14 +20,16 @@ function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (enviando) return;
+
     setEnviando(true);
     setErro("");
     try {
       const usuario = await entrar(dados.email, dados.senha);
       if (usuario) navigate("/acervo");
       else setErro("E-mail ou senha incorretos.");
-    } catch {
-      setErro("Não foi possível conectar. Confira se a API está rodando.");
+    } catch (e) {
+      setErro(e.message); // já vem em português (sem conexão, servidor fora do ar...)
     } finally {
       setEnviando(false);
     }
@@ -61,6 +63,11 @@ function Login() {
         {state?.cadastrado && !erro && (
           <p className="auth__sucesso" role="status">
             Cadastro realizado! Entre com seu e-mail e senha.
+          </p>
+        )}
+        {state?.senhaRedefinida && !erro && (
+          <p className="auth__sucesso" role="status">
+            Senha alterada! Entre com a nova senha.
           </p>
         )}
         {erro && <p className="auth__erro" role="alert">{erro}</p>}

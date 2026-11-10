@@ -24,10 +24,8 @@ function Cadastro() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (dados.senha.length < 6) {
-      setErro("A senha precisa ter pelo menos 6 caracteres.");
-      return;
-    }
+    if (enviando) return;
+
     if (dados.senha !== dados.confirmarSenha) {
       setErro("As senhas não conferem.");
       return;
@@ -39,11 +37,7 @@ function Cadastro() {
       await cadastrar(dados);
       navigate("/login", { state: { cadastrado: true } });
     } catch (e) {
-      setErro(
-        e instanceof TypeError
-          ? "Não foi possível conectar. Confira se a API está rodando."
-          : e.message
-      );
+      setErro(e.message); // já vem em português (e-mail repetido, senha fraca, sem conexão...)
     } finally {
       setEnviando(false);
     }

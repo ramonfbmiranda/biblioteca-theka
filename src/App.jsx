@@ -15,6 +15,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/recuperar-senha" element={<RecuperarSenha />} />
       <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+      <Route path="/redefinir-senha/:uid/:token" element={<RedefinirSenha />} />
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/sobre" element={<SobreNos />} />
       <Route path="/acervo" element={<Acervo />}>
