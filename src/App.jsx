@@ -18,9 +18,11 @@ function App() {
       <Route path="/redefinir-senha/:uid/:token" element={<RedefinirSenha />} />
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/sobre" element={<SobreNos />} />
-      <Route path="/acervo" element={<Acervo />}>
-        <Route path="adicionar-material" element={<AdicionarMaterial />} />
-        <Route path="editar-material/:id" element={<EditarMaterial />} />
+      <Route element={<RotaProtegida />}>
+        <Route path="/acervo" element={<Acervo />}>
+          <Route path="adicionar-material" element={<AdicionarMaterial />} />
+          <Route path="editar-material/:id" element={<EditarMaterial />} />
+        </Route>
       </Route>
     </Routes>
   );
