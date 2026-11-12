@@ -63,8 +63,10 @@ function SobreNos() {
         <h2>Nossa história</h2>
         <div className="sobre__historia-texto">
           <p>
-            No começo, era apenas uma pequena coleção de livros reunidos com carinho,
-            mas, com o tempo, foi crescendo e conquistando cada vez mais leitores.
+            A biblioteca nasceu do desejo de oferecer à comunidade um espaço de acesso à
+            leitura, ao conhecimento e à cultura. No começo, era apenas uma pequena
+            coleção de livros reunidos com carinho, mas, com o tempo, foi crescendo e
+            conquistando cada vez mais leitores.
           </p>
           <p>
             Hoje, além de guardar histórias nas estantes, também faz parte da história
@@ -82,7 +84,7 @@ function SobreNos() {
         <h2>Nossos valores</h2>
         <ul className="sobre__valores">
           {valores.map((v) => (
-            <li key={v.titulo} className={`sobre__valor sobre__valor--${v.tom}`}>
+            <li key={v.tom} className={`sobre__valor sobre__valor--${v.tom}`}>
               <h3>{v.titulo}</h3>
               <img src={v.imagem} alt="" />
             </li>

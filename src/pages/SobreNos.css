@@ -222,7 +222,7 @@
   font-weight: 600;
 }
 
-/* Mobile*/
+/* Mobile */
 @media (max-width: 900px) {
   .sobre {
     --margem: 1rem;
@@ -234,28 +234,38 @@
     border-radius: 0 0 1.25rem 1.25rem;
   }
 
+  /* mascote grande, logo abaixo do cabeçalho e cortado nas bordas */
   .sobre__mascote {
-    position: static;
-    display: block;
-    width: 100%;
-    margin-top: var(--espaco-4);
+    position: absolute;
+    top: 3.5rem;
+    left: -28%;
+    width: 135%;
+    margin: 0;
   }
 
+  /* a margem de cima (92vw) empurra o texto para baixo do mascote */
   .sobre__apresentacao {
     position: static;
     width: auto;
-    margin: var(--espaco-4) var(--margem) 0;
+    margin: 92vw var(--margem) 0;
   }
 
   .sobre__apresentacao img {
-    width: 60%;
+    width: 46%;
     margin-bottom: var(--espaco-3);
   }
 
+  /* etiquetas rolam para o lado */
   .sobre__etiquetas {
     gap: 0.75rem;
     margin-top: var(--espaco-4);
-    padding-left: var(--margem);
+    padding: 0 var(--margem);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .sobre__etiquetas::-webkit-scrollbar {
+    display: none;
   }
 
   .sobre__etiquetas li {
@@ -280,8 +290,22 @@
     margin-top: 1rem;
   }
 
+  /* logotipo na horizontal, no fim da caixa, cortado embaixo e à direita */
   .sobre__historia-logo {
-    display: none;
+    position: static;
+    display: block;
+    flex-shrink: 0;
+    width: calc(100% + 2 * var(--espaco-4) + 1.5rem);
+    height: auto;
+    margin: 0 0 calc(-1 * var(--espaco-4) - 1.5rem) calc(-1 * var(--espaco-4));
+  }
+
+  .sobre__historia-logo img {
+    position: static;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 768 / 358;
+    transform: none;
   }
 
   .sobre__secao {
@@ -295,6 +319,7 @@
   }
 
   .sobre__valor {
+    aspect-ratio: 180 / 142;
     border-radius: 1.25rem;
   }
 
@@ -302,9 +327,11 @@
     padding: 1.25rem 1rem 0;
   }
 
+  /* uma coluna, cartões centralizados */
   .sobre__equipe {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem 1rem;
+    grid-template-columns: min(73%, 22rem);
+    justify-content: center;
+    gap: 3.5rem;
     margin: 3.5rem 0 var(--espaco-5);
   }
 
@@ -323,5 +350,10 @@
     height: 2rem;
     padding: 0 0.75rem;
     font-size: 0.85rem;
+  }
+
+  /* logo do rodapé centralizado só nesta página */
+  .sobre .rodape__marca {
+    align-items: center;
   }
 }
