@@ -1,6 +1,6 @@
 // Livros, gêneros, editoras e autenticação: API da EJECT (Django REST Framework)
 const API = (
-  import.meta.env.VITE_API_URL ?? "https://thekaapitrainee1.pythonanywhere.com"
+  import.meta.env.VITE_API_URL ?? "https://thekaapitrainee.pythonanywhere.com"
 ).replace(/\/$/, "");
 
 // Erro de resposta da API: guarda o código HTTP e o corpo que o servidor devolveu
