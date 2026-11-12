@@ -1,7 +1,7 @@
-// Livros, gêneros, editoras e autenticação: API da EJECT (Django REST Framework)
-const API = (
-  import.meta.env.VITE_API_URL ?? "https://thekaapitrainee.pythonanywhere.com"
-).replace(/\/$/, "");
+// Livros, gêneros, editoras e autenticação: API da EJECT (Django REST Framework).
+// Por padrão os pedidos vão para /api no próprio site (proxy do Vite em desenvolvimento
+// e do vercel.json em produção), o que evita o bloqueio de CORS.
+const API = (import.meta.env.VITE_API_URL ?? "/api").replace(/\/$/, "");
 
 // Erro de resposta da API: guarda o código HTTP e o corpo que o servidor devolveu
 export class ErroApi extends Error {
@@ -28,21 +28,48 @@ async function requisitar(url, opcoes) {
   return resposta.status === 204 ? null : resposta.json();
 }
 
+// auth.js registra aqui como obter o token e o que fazer quando a sessão acaba
+// (assim api.js e auth.js não precisam importar um ao outro)
+let obterToken = async () => null;
+let aoSessaoExpirar = () => {};
+
+export function configurarSessao({ obterToken: o, aoExpirar }) {
+  obterToken = o;
+  aoSessaoExpirar = aoExpirar;
+}
+
+// Só para livros, gêneros e editoras. Não use no login/cadastro/recuperação:
+// o DRF responde 401 se receber um token inválido, mesmo em rota pública.
+async function requisitarAutenticado(url, opcoes = {}) {
+  const token = await obterToken();
+  const comToken = token
+    ? { ...opcoes, headers: { ...opcoes.headers, Authorization: `Bearer ${token}` } }
+    : opcoes;
+  try {
+    return await requisitar(url, comToken);
+  } catch (e) {
+    if (e instanceof ErroApi && e.status === 401) aoSessaoExpirar();
+    throw e;
+  }
+}
+
 const comJson = (metodo, corpo) => ({
   method: metodo,
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(corpo),
 });
 
-// segue as páginas (?page=2, ?page=3...) até acabar; aceita lista simples também
-async function listarTodos(url) {
+// segue as páginas (?page=2, ?page=3...) até acabar; aceita lista simples também.
+// O link da próxima página vem com o endereço completo da API, então troco o início
+// pelo API para continuar passando pelo proxy.
+async function listarTodos(url, buscar = requisitar) {
   const itens = [];
   let proxima = url;
   while (proxima) {
-    const dados = await requisitar(proxima);
+    const dados = await buscar(proxima);
     if (Array.isArray(dados)) return dados;
     itens.push(...dados.results);
-    proxima = dados.next;
+    proxima = dados.next ? dados.next.replace(/^https?:\/\/[^/]+/, API) : null;
   }
   return itens;
 }
@@ -90,28 +117,28 @@ function corpoLivro(metodo, dados, arquivo) {
 }
 
 export const listarLivros = () =>
-  listarTodos(`${API}/livros/`).then((lista) => lista.map(deApi));
+  listarTodos(`${API}/livros/`, requisitarAutenticado).then((lista) => lista.map(deApi));
 
 export const buscarLivro = (id) =>
-  requisitar(`${API}/livros/${id}/`).then(deApi);
+  requisitarAutenticado(`${API}/livros/${id}/`).then(deApi);
 
 export const criarLivro = (dados, arquivo) =>
-  requisitar(`${API}/livros/`, corpoLivro("POST", dados, arquivo)).then(deApi);
+  requisitarAutenticado(`${API}/livros/`, corpoLivro("POST", dados, arquivo)).then(deApi);
 
 export const atualizarLivro = (id, dados, arquivo) =>
-  requisitar(`${API}/livros/${id}/`, corpoLivro("PATCH", dados, arquivo)).then(deApi);
+  requisitarAutenticado(`${API}/livros/${id}/`, corpoLivro("PATCH", dados, arquivo)).then(deApi);
 
 export const deletarLivro = (id) =>
-  requisitar(`${API}/livros/${id}/`, { method: "DELETE" });
+  requisitarAutenticado(`${API}/livros/${id}/`, { method: "DELETE" });
 
-export const listarEditoras = () => listarTodos(`${API}/editoras/`);
-export const listarGeneros = () => listarTodos(`${API}/generos/`);
+export const listarEditoras = () => listarTodos(`${API}/editoras/`, requisitarAutenticado);
+export const listarGeneros = () => listarTodos(`${API}/generos/`, requisitarAutenticado);
 
 // ---------- Autenticação (API da EJECT) ----------
 
 const normalizarEmail = (email) => email.trim().toLowerCase();
 
-// Login: devolve os tokens (guardados na Etapa 2)
+// Login: devolve os tokens
 export const fazerLogin = (email, senha) =>
   requisitar(
     `${API}/auth/token/`,
