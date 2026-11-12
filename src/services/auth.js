@@ -72,7 +72,13 @@ export function sair() {
   localStorage.removeItem("theka:usuario"); // chave da versão antiga do login
 }
 
-export const estaAutenticado = () => Boolean(lerSessao()?.access);
+// Autenticado = tem sessão e (access ainda válido OU refresh ainda válido para renová-lo)
+export function estaAutenticado() {
+  const sessao = lerSessao();
+  if (!sessao?.access) return false;
+  if (!expirou(sessao.access, 0)) return true;
+  return Boolean(sessao.refresh) && !expirou(sessao.refresh, 0);
+}
 
 export const usuarioAtual = () => lerSessao()?.usuario ?? null;
 

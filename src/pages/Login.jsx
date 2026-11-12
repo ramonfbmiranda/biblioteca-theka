@@ -26,7 +26,7 @@ function Login() {
     setErro("");
     try {
       const usuario = await entrar(dados.email, dados.senha);
-      if (usuario) navigate("/acervo");
+      if (usuario) navigate(state?.de ?? "/acervo", { replace: true });
       else setErro("E-mail ou senha incorretos.");
     } catch (e) {
       setErro(e.message); // já vem em português (sem conexão, servidor fora do ar...)

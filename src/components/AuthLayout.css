@@ -5,9 +5,8 @@
   background-color: var(--cor-marrom);
 }
 
-/* lAdo marrom */
+/* Lado marrom */
 .auth__visual {
-
   position: relative;
   flex: 1 1 58%;
   overflow: hidden;
@@ -19,15 +18,13 @@
 }
 
 /* Login: aparece o pé direito */
-
 .auth--pe-direito .auth__mascote {
   top: 14%;
   left: -34%;
   width: 132%;
 }
 
-/* Resto com  o pé esquerdo */
-
+/* Resto com o pé esquerdo */
 .auth--pe-esquerdo .auth__mascote {
   top: 22%;
   left: 0;
@@ -41,8 +38,7 @@
   width: clamp(9rem, 26%, 16rem);
 }
 
-/*  Painel branco  */
-
+/* Painel branco */
 .auth__painel {
   flex: 0 0 42%;
   display: flex;
@@ -95,15 +91,26 @@
   gap: var(--espaco-3);
 }
 
-/*  MOBILE (CELULAR E TABLET)  */
+/* Mensagens de erro e sucesso (desktop e mobile) */
+.auth__erro {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #b3261e;
+}
 
+.auth__sucesso {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2e7d32;
+}
+
+/* MOBILE (CELULAR E TABLET) */
 @media (max-width: 900px) {
   .auth {
     flex-direction: column;
   }
 
-  /* altura acompanha a largura docelular*/
-
+  /* altura acompanha a largura do celular */
   .auth__visual {
     flex: 0 0 min(107vw, 30rem);
   }
@@ -173,15 +180,4 @@
   .auth .botao {
     padding: 0.45rem 1.75rem;
   }
-  .auth__erro {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #b3261e;
-}
-
-  .auth__sucesso {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #2e7d32;
-}
 }

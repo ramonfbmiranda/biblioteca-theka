@@ -222,21 +222,3 @@ export function mensagemDeErro(erro, aoNegar) {
   }
   return [...partes].join(" ") || "Algo deu errado. Tente de novo.";
 }
-
-// ---------- Usuários (modelo antigo, json-server) ----------
-
-async function lerEstatico() {
-  const resposta = await fetch("/db.json");
-  if (!resposta.ok) throw new Error("Não foi possível carregar os dados.");
-  return resposta.json();
-}
-
-export const listarUsuarios = () =>
-  import.meta.env.DEV
-    ? requisitar(`${USUARIOS_DEV}/usuarios`)
-    : lerEstatico().then((d) => d.usuarios ?? []);
-
-export async function criarUsuario(dados) {
-  if (!import.meta.env.DEV) throw new Error("Esta versão publicada é somente leitura.");
-  return requisitar(`${USUARIOS_DEV}/usuarios`, comJson("POST", dados));
-}
