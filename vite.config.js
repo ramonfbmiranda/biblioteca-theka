@@ -8,7 +8,7 @@ export default defineConfig({
     // em desenvolvimento, /api vai para a API da EJECT (na Vercel isso é feito pelo vercel.json)
     proxy: {
       "/api": {
-        target: "https://thekaapitrainee.pythonanywhere.com",
+        target: "https://thekapitrainee.pythonanywhere.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

@@ -100,7 +100,7 @@ A sessão fica no `localStorage` (chave `theka:sessao`), gerenciada por `src/ser
 Em `.env.local`, na raiz do projeto:
 
 ```
-VITE_API_URL=https://thekaapitrainee1.pythonanywhere.com
+VITE_API_URL=https://thekapitrainee1.pythonanywhere.com
 VITE_GOOGLE_BOOKS_KEY=sua_chave_aqui
 ```
 
